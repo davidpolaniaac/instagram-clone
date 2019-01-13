@@ -4,8 +4,8 @@ import {
 } from 'react-native';
 import { Field, reduxForm } from 'redux-form';
 
-const fieldNombre = props => (
-  <View>
+const field = props => (
+  <View style={styles.fieldInput}>
     <TextInput
       onChangeText={props.input.onChange}
       placeholder={props.ph}
@@ -15,7 +15,9 @@ const fieldNombre = props => (
       secureTextEntry={!!(props.input.name === 'password' || props.input.name === 'confirmacion')}
       onBlur={props.input.onBlur}
     />
-    { props.meta.touched && props.meta.error && <Text>{props.meta.error}</Text> }
+    <View style={styles.linea} />
+    { props.meta.touched && props.meta.error && <Text style={styles.errors}>{props.meta.error}</Text> }
+
   </View>
 );
 
@@ -58,17 +60,30 @@ const validate = (values) => {
 
 const SignUpForm = props => (
   <View>
-    <Text> Redux Form</Text>
-    <Field name="nombre" component={fieldNombre} ph="nombre" />
-    <Field name="correo" component={fieldNombre} ph="coore@correo.com" />
-    <Field name="password" component={fieldNombre} ph="********" />
-    <Field name="confirmacion" component={fieldNombre} ph="*********" />
+    <Field name="nombre" component={field} ph="nombre" />
+    <Field name="correo" component={field} ph="corre@correo.com" />
+    <Field name="password" component={field} ph="********" />
+    <Field name="confirmacion" component={field} ph="*********" />
     <Button
       title="Registrar"
       onPress={props.handleSubmit(values => console.log('Hola', values))}
     />
   </View>
 );
+
+
+const styles = StyleSheet.create({
+  fieldInput: {
+    marginBottom: 16,
+  },
+  linea: {
+    backgroundColor: '#DCDCDC',
+    height: 2,
+  },
+  errors: {
+    color: '#FF0000',
+  },
+});
 
 export default reduxForm(
   {
