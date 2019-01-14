@@ -29,17 +29,14 @@ const validate = (values) => {
     errors.correo = 'Correo invalido';
   } else if (values.correo.length < 5) {
     errors.correo = 'deben ser al menos 5 caracteres';
-  } else if (values.correo.length > 10) {
-    errors.correo = 'deben ser menor de 10 caracteres';
   }
 
   if (!values.password) {
     errors.password = 'requerido';
   } else if (values.password.length < 5) {
     errors.password = 'deben ser al menos 5 caracteres';
-  } else if (values.correo.length > 10) {
-    errors.password = 'deben ser menor de 10 caracteres';
   }
+
   return errors;
 };
 

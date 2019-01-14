@@ -3,6 +3,7 @@ import {
   View, Text, StyleSheet, Button, TextInput,
 } from 'react-native';
 import { Field, reduxForm } from 'redux-form';
+import { autenticacion } from '../../../Store/Servicios/Firebase';
 
 const field = props => (
   <View style={styles.fieldInput}>
@@ -37,16 +38,12 @@ const validate = (values) => {
     errors.correo = 'Correo invalido';
   } else if (values.correo.length < 5) {
     errors.correo = 'deben ser al menos 5 caracteres';
-  } else if (values.correo.length > 10) {
-    errors.correo = 'deben ser menor de 10 caracteres';
   }
 
   if (!values.password) {
     errors.password = 'requerido';
   } else if (values.password.length < 5) {
     errors.password = 'deben ser al menos 5 caracteres';
-  } else if (values.correo.length > 10) {
-    errors.password = 'deben ser menor de 10 caracteres';
   }
 
   if (!values.confirmacion) {
@@ -66,7 +63,16 @@ const SignUpForm = props => (
     <Field name="confirmacion" component={field} ph="*********" />
     <Button
       title="Registrar"
-      onPress={props.handleSubmit(values => console.log('Hola', values))}
+      onPress={props.handleSubmit((values) => {
+        autenticacion.createUserWithEmailAndPassword(values.correo, values.password)
+          .then(success => console.log(success))
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode);
+            console.log(errorMessage);
+          });
+      })}
     />
   </View>
 );
