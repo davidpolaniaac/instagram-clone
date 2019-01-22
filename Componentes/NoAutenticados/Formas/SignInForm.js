@@ -46,7 +46,7 @@ const SignInForm = props => (
     <Field name="password" component={field} ph="********" />
     <Button
       title="SignIn"
-      onPress={props.handleSubmit(values => console.log('Hola', values))}
+      onPress={props.handleSubmit(props.login)}
     />
   </View>
 );
