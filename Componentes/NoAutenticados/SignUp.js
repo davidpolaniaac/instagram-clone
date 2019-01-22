@@ -14,13 +14,16 @@ class SignUp extends Component {
     };
   }
 
+  registrodeUsuario = (values) => {
+    this.props.registro(values);
+  }
+
   render() {
-    console.log(this.props.numero);
     const { navigation } = this.props;
 
     return (
       <View style={styles.container}>
-        <SignUpForm />
+        <SignUpForm registro={this.registrodeUsuario} />
         <Button
           title="SignIn"
           onPress={() => { navigation.goBack(); }}
@@ -44,8 +47,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  aumentar: () => {
-    dispatch({ type: 'AUMENTAR_REDUCER_PRUEBA' });
+  registro: (values) => {
+    dispatch({ type: 'REGISTRO', datos: values });
   },
 });
 
