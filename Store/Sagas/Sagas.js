@@ -24,13 +24,14 @@ function* sagaRegistro(values) {
   }
 }
 
-const loginEnFirebase = ({ correo, password }) => autenticacion.createUserWithEmailAndPassword(correo, password)
+const loginEnFirebase = ({ correo, password }) => autenticacion.signInWithEmailAndPassword(correo, password)
   .then(success => success)
   .catch(error => error);
 
 function* sagaLogin(values) {
   try {
     const resultado = yield call(loginEnFirebase, values.datos);
+    console.log(resultado);
   } catch (error) {
     console.log(error);
   }
