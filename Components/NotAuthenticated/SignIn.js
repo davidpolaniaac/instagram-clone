@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {
-  View, Text, StyleSheet, Button,
+  View, StyleSheet, Button,
 } from 'react-native';
 import { connect } from 'react-redux';
-import SignInForm from './Formas/SignInForm';
-import { actionLogin } from '../../Store/ACCIONES';
+import SignInForm from './Forms/SignInForm';
+import { actionLogin } from '../../Store/Actions';
 
 class SignIn extends Component {
   constructor(props) {
@@ -15,7 +15,7 @@ class SignIn extends Component {
     };
   }
 
-  signIndeUsuario = (values) => {
+  userSignIn = (values) => {
     this.props.login(values);
   }
 
@@ -24,7 +24,7 @@ class SignIn extends Component {
 
     return (
       <View style={styles.container}>
-        <SignInForm login={this.signIndeUsuario} />
+        <SignInForm login={this.userSignIn} />
         <Button
           title="SignUp"
           onPress={() => { navigation.navigate('SignUp'); }}
@@ -38,18 +38,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#90EE90',
+    backgroundColor: '#f9f9f9',
     paddingHorizontal: 16,
   },
 });
 
 const mapStateToProps = state => ({
-  numero: state.reducerPrueba,
+  prop: state.prop,
 });
 
 const mapDispatchToProps = dispatch => ({
-  login: (datos) => {
-    dispatch(actionLogin(datos));
+  login: (data) => {
+    dispatch(actionLogin(data));
   },
 });
 

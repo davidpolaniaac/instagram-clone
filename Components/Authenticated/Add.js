@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import {
-  View, Text, Button, StyleSheet,
+  View, Text, StyleSheet, Button,
 } from 'react-native';
-import { autenticacion } from '../../Store/Servicios/Firebase';
 
-export default class Profile extends Component {
+export default class Add extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,29 +12,27 @@ export default class Profile extends Component {
 
   render() {
     const { navigation } = this.props;
-
     return (
       <View style={styles.container}>
-        <Text> Profile </Text>
+        <Text> Add </Text>
         <Button
-          title="Publicacion"
-          onPress={() => { navigation.navigate('Publicacion'); }}
+          title="Select Gallery"
+          onPress={() => { navigation.navigate('SelectGallery'); }}
         />
         <Button
-          title="Cerrar session"
-          onPress={() => { autenticacion.signOut(); }}
+          title="Take Photo"
+          onPress={() => { navigation.navigate('SelectGallery'); }}
         />
       </View>
     );
   }
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#2c3e50',
+    backgroundColor: '#f9f9f9',
   },
 });

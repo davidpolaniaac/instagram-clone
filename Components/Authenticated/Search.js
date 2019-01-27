@@ -17,8 +17,8 @@ export default class Search extends Component {
       <View style={styles.container}>
         <Text> Search </Text>
         <Button
-          title="Publicacion"
-          onPress={() => { navigation.navigate('Publicacion'); }}
+          title="Publications"
+          onPress={() => { navigation.navigate(''); }}
         />
       </View>
     );
@@ -30,6 +30,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#2c3e50',
+    backgroundColor: '#f9f9f9',
   },
 });

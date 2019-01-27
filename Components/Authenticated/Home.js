@@ -3,8 +3,8 @@ import {
   StyleSheet, View, FlatList,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { actionDescargarPublicaciones } from '../../Store/ACCIONES';
-import Publicacion from './Publicacion';
+import { actionDownloadPublications } from '../../Store/Actions';
+import Publications from './Publications';
 
 
 class Home extends Component {
@@ -15,16 +15,16 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    this.props.descargarPublicaciones();
+    this.props.downloadPublications();
   }
 
   render() {
-    const { publicaciones, autores } = this.props;
+    const { publications, authors } = this.props;
     return (
       <View style={styles.container}>
         <FlatList
-          data={publicaciones}
-          renderItem={({ item, index }) => <Publicacion item={item} autor={autores[index]} />}
+          data={publications}
+          renderItem={({ item, index }) => <Publications item={item} autor={authors[index]} />}
           ItemSeparatorComponent={() => <View style={styles.separador} />}
         />
       </View>
@@ -46,13 +46,13 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  publicaciones: state.reducerAgregarPublicacionDescargadas,
-  autores: state.reducerAgregarAutoresDescargados,
+  publications: state.reducerAddImagePublicationDownload,
+  authors: state.reducerAddAuthorsDownload,
 });
 
 const mapDispatchToProps = dispatch => ({
-  descargarPublicaciones: () => {
-    dispatch(actionDescargarPublicaciones());
+  downloadPublications: () => {
+    dispatch(actionDownloadPublications());
   },
 });
 

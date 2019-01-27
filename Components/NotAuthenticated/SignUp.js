@@ -4,12 +4,11 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { blur } from 'redux-form';
-import SignUpForm from './Formas/SignUpForm';
+import SignUpForm from './Forms/SignUpForm';
 import {
-  actionRegistro, actionCargarImageSignUp, actionLimpiarImageSingUp,
-} from '../../Store/ACCIONES';
-
-import SeleccionarImagen from '../SeleccionarImagen';
+  actionRegistry, actionLoadImageSignUp, actionCleanImageSignUp,
+} from '../../Store/Actions';
+import SelectImage from '../SelectImage';
 
 class SignUp extends Component {
   constructor(props) {
@@ -21,11 +20,11 @@ class SignUp extends Component {
   }
 
   componentWillUnmount() {
-    this.props.LimpiarImage();
+    this.props.cleanImage();
   }
 
-  registrodeUsuario = (values) => {
-    this.props.registro(values);
+  registrodeuser = (values) => {
+    this.props.registry(values);
   }
 
   render() {
@@ -33,8 +32,11 @@ class SignUp extends Component {
 
     return (
       <View style={styles.container}>
-        <SeleccionarImagen image={this.props.image.image} cargar={this.props.cargarImage} />
-        <SignUpForm registro={this.registrodeUsuario} image={this.props.image.image} />
+        <SelectImage image={this.props.image.image} load={this.props.loadImage} />
+        <SignUpForm
+          registry={this.registrodeuser}
+          image={this.props.image.image}
+        />
         <Button
           title="SignIn"
           onPress={() => { navigation.goBack(); }}
@@ -48,25 +50,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#90EE90',
+    backgroundColor: '#f9f9f9',
     paddingHorizontal: 16,
   },
 });
 
 const mapStateToProps = state => ({
-  image: state.reducerImagenSignUp,
+  image: state.reducerImageSignUp,
 });
 
 const mapDispatchToProps = dispatch => ({
-  registro: (datos) => {
-    dispatch(actionRegistro(datos));
+  registry: (data) => {
+    dispatch(actionRegistry(data));
   },
-  cargarImage: (image) => {
-    dispatch(actionCargarImageSignUp(image));
+  loadImage: (image) => {
+    dispatch(actionLoadImageSignUp(image));
     dispatch(blur('SignUpForm', 'image', Date.now()));
   },
-  LimpiarImage: () => {
-    dispatch(actionLimpiarImageSingUp());
+  cleanImage: () => {
+    dispatch(actionCleanImageSignUp());
   },
 });
 

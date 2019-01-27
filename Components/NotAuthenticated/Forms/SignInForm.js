@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   View, Text, StyleSheet, Button, TextInput,
 } from 'react-native';
 import { Field, reduxForm } from 'redux-form';
 
 const field = props => (
-  <View style={styles.fieldInput}>>
+  <View style={styles.fieldInput}>
     <TextInput
       onChangeText={props.input.onChange}
       placeholder={props.ph}
       value={props.input.value}
-      keyboardType={props.input.name === 'correo' ? 'email-address' : 'default'}
+      keyboardType={props.input.name === 'email' ? 'email-address' : 'default'}
       autoCapitalize="none"
-      secureTextEntry={!!(props.input.name === 'password' || props.input.name === 'confirmacion')}
+      secureTextEntry={!!(props.input.name === 'password' || props.input.name === 'confirmation')}
       onBlur={props.input.onBlur}
     />
     <View style={styles.linea} />
@@ -23,18 +23,18 @@ const field = props => (
 const validate = (values) => {
   const errors = {};
 
-  if (!values.correo) {
-    errors.correo = 'requerido';
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.correo)) {
-    errors.correo = 'Correo invalido';
-  } else if (values.correo.length < 5) {
-    errors.correo = 'deben ser al menos 5 caracteres';
+  if (!values.email) {
+    errors.email = 'required';
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = 'invalid email';
+  } else if (values.email.length < 5) {
+    errors.email = 'must be at least 5 characters';
   }
 
   if (!values.password) {
-    errors.password = 'requerido';
+    errors.password = 'required';
   } else if (values.password.length < 5) {
-    errors.password = 'deben ser al menos 5 caracteres';
+    errors.password = 'must be at least 5 characters';
   }
 
   return errors;
@@ -42,7 +42,7 @@ const validate = (values) => {
 
 const SignInForm = props => (
   <View>
-    <Field name="correo" component={field} ph="corre@correo.com" />
+    <Field name="email" component={field} ph="corre@email.com" />
     <Field name="password" component={field} ph="********" />
     <Button
       title="SignIn"

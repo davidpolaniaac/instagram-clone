@@ -1,82 +1,81 @@
 import {
   takeEvery, call, select, put, all,
 } from 'redux-saga/effects';
-import { autenticacion, baseDeDatos } from '../Servicios/Firebase';
-import CONSTANTES from '../CONSTANTES';
+import { authentication, database } from '../Services/Firebase';
+import CONSTANTS from '../Constants';
 import {
-  actionAgregarPublicacionesStore, actionAgregarAutoresStore, actionExitoSubirPublicacion, actionErrorSubirPublicacion,
-} from '../ACCIONES';
+  actionAddPublicationsStore, actionAddAuthorsStore, actionSuccessUploadPublication, actionErrorUploadPublication,
+} from '../Actions';
 
 
-const registroEnFirebase = values => autenticacion
-  .createUserWithEmailAndPassword(values.correo, values.password)
+const registryInFirebase = values => authentication
+  .createUserWithEmailAndPassword(values.email, values.password)
   .then(success => success.user.toJSON())
   .catch(error => error);
 
-const registroEnBaseDeDatos = ({
-  uid, email, nombre, fotoURL,
-}) => baseDeDatos.ref(`usuarios/${uid}`).set({
-  nombre,
+const registryInDataBase = ({
+  uid, email, name, photoURL,
+}) => database.ref(`users/${uid}`).set({
+  name,
   email,
-  fotoURL,
+  photoURL,
 });
 
-const registroFotoCloudinary = ({ image }) => {
+const registryPhotoCloudinary = ({ image }) => {
   const { uri, type } = image;
   const splitName = uri.split('/');
   const name = [...splitName].pop();
 
-  const foto = {
+  const photo = {
     uri,
     type,
     name,
   };
 
   const formImage = new FormData();
-  formImage.append('upload_preset', CONSTANTES.CLOIDINARY_PRESET);
-  formImage.append('file', foto);
+  formImage.append('upload_preset', CONSTANTS.CLOIDINARY_PRESET);
+  formImage.append('file', photo);
 
-  return fetch(CONSTANTES.CLOUDINARY_NAME, {
+  return fetch(CONSTANTS.CLOUDINARY_NAME, {
     method: 'POST',
     body: formImage,
   }).then(reponse => reponse.json()).catch(error => error);
 };
 
-function* sagaRegistro(values) {
+function* sagaRegistry(values) {
   try {
-    const image = yield select(state => state.reducerImagenSignUp);
-    const urlFoto = yield call(registroFotoCloudinary, image);
-    const fotoURL = urlFoto.secure_url;
-    const registro = yield call(registroEnFirebase, values.datos);
-    const { email, uid } = registro;
-    const { datos: { nombre } } = values;
-    yield call(registroEnBaseDeDatos, {
-      uid, email, nombre, fotoURL,
+    const image = yield select(state => state.reducerImageSignUp);
+    const urlphoto = yield call(registryPhotoCloudinary, image);
+    const photoURL = urlphoto.secure_url;
+    const registry = yield call(registryInFirebase, values.data);
+    const { email, uid } = registry;
+    const { data: { name } } = values;
+    yield call(registryInDataBase, {
+      uid, email, name, photoURL,
     });
   } catch (error) {
     console.log(error);
   }
 }
 
-const loginEnFirebase = ({ correo, password }) => autenticacion.signInWithEmailAndPassword(correo, password)
+const loginInFirebase = ({ email, password }) => authentication.signInWithEmailAndPassword(email, password)
   .then(success => success)
   .catch(error => error);
 
 function* sagaLogin(values) {
   try {
-    const resultado = yield call(loginEnFirebase, values.datos);
-    console.log(resultado);
+    yield call(loginInFirebase, values.data);
   } catch (error) {
     console.log(error);
   }
 }
 
-const escribirAutorPublicaciones = ({ key, uid }) => baseDeDatos.ref(`autor-publicaciones/${uid}`)
+const writeAuthorPublications = ({ key, uid }) => database.ref(`autor-publications/${uid}`)
   .update({ [key]: true }).then(reponse => reponse.json()).catch(error => error);
 
-const escribirFirebase = ({
+const writeFirebase = ({
   secure_url, width, height, uid,
-}, text = '') => baseDeDatos.ref('publicaciones/').push({
+}, text = '') => database.ref('publications/').push({
   secure_url,
   width,
   height,
@@ -84,62 +83,62 @@ const escribirFirebase = ({
   text,
 }).then(reponse => reponse).catch(error => error);
 
-function* sagaSubirPublicacion({ datos }) {
+function* sagaUploadPublications({ data }) {
   try {
-    const image = yield select(state => state.reducerImagenPublicacion);
+    const image = yield select(state => state.reducerImagePublication);
     const user = yield select(state => state.reducerSession);
     const { uid } = user;
-    const resultado = yield call(registroFotoCloudinary, image);
-    const { secure_url, width, height } = resultado;
-    const parametrosImagen = {
+    const result = yield call(registryPhotoCloudinary, image);
+    const { secure_url, width, height } = result;
+    const parametersImage = {
       secure_url, width, height, uid,
     };
-    const escribirEnFirebase = yield call(escribirFirebase, parametrosImagen, datos.text);
-    const { key } = escribirEnFirebase;
-    const parametrosDeAutorPublicaciones = { key, uid };
-    yield call(escribirAutorPublicaciones, parametrosDeAutorPublicaciones);
-    yield put(actionExitoSubirPublicacion());
+    const writeFirebaseResult = yield call(writeFirebase, parametersImage, data.text);
+    const { key } = writeFirebaseResult;
+    const parametersofAutorpublications = { key, uid };
+    yield call(writeAuthorPublications, parametersofAutorpublications);
+    yield put(actionSuccessUploadPublication());
   } catch (error) {
     console.log(error);
-    yield put(actionErrorSubirPublicacion());
+    yield put(actionErrorUploadPublication());
   }
 }
 
-const descargarPublicacionesDeFirebase = () => baseDeDatos
-  .ref('publicaciones/')
+const downloadPublicationsFromFirebase = () => database
+  .ref('publications/')
   .once('value')
   .then((snapshot) => {
-    const publicaciones = [];
+    const publications = [];
     snapshot.forEach((childSnapshot) => {
       const { key } = childSnapshot;
-      const publicacion = childSnapshot.val();
-      publicacion.key = key;
-      publicaciones.push(publicacion);
+      const publication = childSnapshot.val();
+      publication.key = key;
+      publications.push(publication);
     });
-    return publicaciones;
+    return publications;
   })
   .catch(error => error);
 
-const descargaAutor = uid => baseDeDatos
-  .ref(`usuarios/${uid}`)
+const downloadAuthor = uid => database
+  .ref(`users/${uid}`)
   .once('value')
   .then(snapshot => snapshot.val())
   .catch(error => error);
 
-function* sagaDescargarPublicacion() {
+function* sagaDownloadpublications() {
   try {
-    const publicaciones = yield call(descargarPublicacionesDeFirebase);
-    const autores = yield all(publicaciones.map(publicacion => call(descargaAutor, publicacion.uid)));
-    yield put(actionAgregarAutoresStore(autores));
-    yield put(actionAgregarPublicacionesStore(publicaciones));
+    const publications = yield call(downloadPublicationsFromFirebase);
+    const authors = yield all(publications.map(publication => call(downloadAuthor, publication.uid)));
+    yield put(actionAddAuthorsStore(authors));
+    yield put(actionAddPublicationsStore(publications));
   } catch (error) {
     console.log(error);
   }
 }
 
-export default function* functionPrimaria() {
-  yield takeEvery(CONSTANTES.REGISTRO, sagaRegistro);
-  yield takeEvery(CONSTANTES.LOGIN, sagaLogin);
-  yield takeEvery(CONSTANTES.SUBIR_PUBLICACION, sagaSubirPublicacion);
-  yield takeEvery(CONSTANTES.DESCARGAR_PUBLICACIONES, sagaDescargarPublicacion);
+export default function* primaryFunction() {
+  yield takeEvery(CONSTANTS.REGISTRY, sagaRegistry);
+  yield takeEvery(CONSTANTS.LOGIN, sagaLogin);
+  yield takeEvery(CONSTANTS.UP_PUBLICATION, sagaUploadPublications);
+  yield takeEvery(CONSTANTS.DOWNLOAD_PUBLICATION, sagaDownloadpublications);
 }

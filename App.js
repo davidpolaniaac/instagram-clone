@@ -2,21 +2,21 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Provider } from 'react-redux';
 import Store from './Store/Store';
-import Seleccion from './Seleccion';
+import Auth from './Components/Auth';
 
 console.disableYellowBox = ['Remote debugger'];
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { nombre: 'intagram-cloen' };
+    this.state = { name: 'instagram-clone' };
   }
 
   render() {
     return (
       <View style={styles.container}>
         <Provider store={Store}>
-          <Seleccion />
+          <Auth />
         </Provider>
       </View>
     );
@@ -26,7 +26,7 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f9f9f9',
     justifyContent: 'center',
   },
 });

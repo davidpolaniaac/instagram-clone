@@ -29,22 +29,22 @@ const fieldImage = props => (
 const validate = (values, props) => {
   const errors = {};
   if (!props.image) {
-    errors.image = 'Imagen requerida';
+    errors.image = 'Required image';
   }
   if (values.text && values.text.length > 140) {
-    errors.text = 'deben ser menor de 140 caracteres';
+    errors.text = 'must be less than 140 characters';
   }
 
   return errors;
 };
 
-const SeleccionarGaleriaForm = props => (
+const SelectGalleryForm = props => (
   <View>
     <Field name="image" component={fieldImage} />
-    <Field name="text" component={field} ph="Texto de publicacion" />
+    <Field name="text" component={field} ph="Publication text" />
     <Button
-      title="Registrar"
-      onPress={props.handleSubmit(props.registro)}
+      title="to post"
+      onPress={props.handleSubmit(props.registry)}
     />
   </View>
 );
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
 
 export default reduxForm(
   {
-    form: 'SeleccionarGaleriaForm',
+    form: 'SelectGalleryForm',
     validate,
   },
-)(SeleccionarGaleriaForm);
+)(SelectGalleryForm);

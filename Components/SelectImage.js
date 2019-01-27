@@ -4,8 +4,8 @@ import {
 } from 'react-native';
 import { ImagePicker, Permissions } from 'expo';
 
-const SeleccionarImagen = (props) => {
-  const permiso = async () => {
+const SelectImage = (props) => {
+  const permission = async () => {
     const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
     if (status !== 'granted') {
       await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -13,19 +13,19 @@ const SeleccionarImagen = (props) => {
   };
 
   const pickImage = async () => {
-    await permiso();
+    await permission();
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
     });
     if (!result.cancelled) {
-      props.cargar(result);
+      props.load(result);
     }
   };
 
   const radius = { borderRadius: props.radius ? 0 : 80 };
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
       <TouchableOpacity onPress={pickImage}>
         {props.image ? <Image source={{ uri: props.image.uri }} style={{ width: 160, height: 160, ...radius }} /> : <Image source={require('../assets/profile-default.png')} style={{ width: 160, height: 160, ...radius }} />}
       </TouchableOpacity>
@@ -33,4 +33,4 @@ const SeleccionarImagen = (props) => {
   );
 };
 
-export default SeleccionarImagen;
+export default SelectImage;

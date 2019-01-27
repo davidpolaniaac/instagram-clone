@@ -1,6 +1,6 @@
 import { createStackNavigator } from 'react-navigation';
 import Add from './Add';
-import SeleccionarGaleria from './SeleccionarGaleria';
+import SelectGallery from './SelectGallery';
 
 
 const StackAdd = createStackNavigator(
@@ -8,8 +8,8 @@ const StackAdd = createStackNavigator(
     Add: {
       screen: Add,
     },
-    SeleccionarGaleria: {
-      screen: SeleccionarGaleria,
+    SelectGallery: {
+      screen: SelectGallery,
     },
   },
 );

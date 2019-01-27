@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-class Publicacion extends Component {
+class Publications extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,8 +20,8 @@ class Publicacion extends Component {
     return (
       <View>
         <View style={styles.header}>
-          <Image source={{ uri: autor.fotoURL }} style={{ width: 48, height: 48, borderRadius: 24 }} />
-          <Text>{autor.nombre}</Text>
+          <Image source={{ uri: autor.photoURL }} style={{ width: 48, height: 48, borderRadius: 24 }} />
+          <Text>{autor.name}</Text>
         </View>
         <View>
           <Image source={{ uri: item.secure_url }} style={{ width, height }} />
@@ -34,7 +34,7 @@ class Publicacion extends Component {
           <View style={styles.text}>
             <Text>{item.text}</Text>
           </View>
-          <Text>Comentarios</Text>
+          <Text>Comments</Text>
         </View>
       </View>
     );
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#2c3e50',
+    backgroundColor: '#f9f9f9',
   },
   header: {
     flexDirection: 'row',
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Publicacion;
+export default Publications;

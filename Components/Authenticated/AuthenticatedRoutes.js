@@ -5,7 +5,7 @@ import { StackAdd } from './StackAdd';
 import { StackFollow } from './StackFollow';
 import Profile from './Profile';
 
-const RutasAutenticadas = createBottomTabNavigator(
+const AuthenticatedRoutes = createBottomTabNavigator(
   {
     Home: {
       screen: StackHome,
@@ -25,4 +25,4 @@ const RutasAutenticadas = createBottomTabNavigator(
   },
 );
 
-export { RutasAutenticadas };
+export { AuthenticatedRoutes };

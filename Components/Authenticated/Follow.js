@@ -17,8 +17,12 @@ export default class Follow extends Component {
       <View style={styles.container}>
         <Text> Follow </Text>
         <Button
-          title="Autor"
-          onPress={() => { navigation.navigate('Autor'); }}
+          title="Author"
+          onPress={() => { navigation.navigate('Author'); }}
+        />
+        <Button
+          title="Comments"
+          onPress={() => { navigation.navigate('Comments'); }}
         />
       </View>
     );
@@ -30,6 +34,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#2c3e50',
+    backgroundColor: '#f1f1f1',
   },
 });

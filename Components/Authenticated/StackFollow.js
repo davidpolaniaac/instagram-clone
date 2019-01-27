@@ -1,8 +1,8 @@
 import { createStackNavigator } from 'react-navigation';
 import { TabFollow } from './TabFollow';
-import Autor from './Profile';
-import Publicacion from './Publicacion';
-import Comentarios from './Comentarios';
+import Author from './Profile';
+import Publications from './Publications';
+import Comments from './Comments';
 
 const StackFollow = createStackNavigator(
   {
@@ -12,14 +12,14 @@ const StackFollow = createStackNavigator(
         header: null,
       },
     },
-    Autor: {
-      screen: Autor,
+    Author: {
+      screen: Author,
     },
-    Publicacion: {
-      screen: Publicacion,
+    Publications: {
+      screen: Publications,
     },
-    Comentarios: {
-      screen: Comentarios,
+    Comments: {
+      screen: Comments,
     },
   },
 );

@@ -1,72 +1,68 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { reducer as form } from 'redux-form';
 import createSagaMiddleware from 'redux-saga';
-import functionPrimaria from './Sagas/Sagas';
-import CONSTANTES from './CONSTANTES';
+import primaryFunction from './Sagas/Sagas';
+import CONSTANTS from './Constants';
 
 const reducerSession = (state = null, action) => {
   switch (action.type) {
-    case CONSTANTES.ESTABLECER_SESION:
-      return action.usuario;
-    case CONSTANTES.CERRAR_SESION:
+    case CONSTANTS.ESTABLISH_SESSION:
+      return action.user;
+    case CONSTANTS.SIGN_OFF:
       return null;
     default:
       return state;
   }
 };
 
-const reducerImagenSignUp = (state = { image: null }, action) => {
+const reducerImageSignUp = (state = { image: null }, action) => {
   switch (action.type) {
-    case CONSTANTES.CARGAR_IMAGEN_SIGNUP:
+    case CONSTANTS.LOAD_IMAGE_SIGNUP:
       return { image: action.image };
-    case CONSTANTES.LIMPIAR_IMAGEN_SIGNUP:
+    case CONSTANTS.CLEAN_IMAGE_SIGNUP:
       return { image: null };
     default:
       return state;
   }
 };
 
-const reducerImagenPublicacion = (state = { image: null }, action) => {
+const reducerImagePublication = (state = { image: null }, action) => {
   switch (action.type) {
-    case CONSTANTES.CARGAR_IMAGEN_PUBLICACION:
+    case CONSTANTS.LOAD_IMAGE_PUBLICATION:
       return { image: action.image };
-    case CONSTANTES.LIMPIAR_IMAGEN_PUBLICACION:
+    case CONSTANTS.CLEAN_IMAGE_PUBLICATION:
       return { image: null };
     default:
       return state;
   }
 };
 
-const reducerAgregarPublicacionDescargadas = (state = [], action) => {
+const reducerAddImagePublicationDownload = (state = [], action) => {
   switch (action.type) {
-    case CONSTANTES.AGREGAR_PUBLICACIONES_STORE:
-      return [...state, ...action.publicaciones];
-    case CONSTANTES.LIMPIAR_IMAGEN_PUBLICACION:
-      return [];
+    case CONSTANTS.ADD_PUBLICATIONS_STORE:
+      return [...state, ...action.publications];
     default:
       return state;
   }
 };
 
-const reducerAgregarAutoresDescargados = (state = [], action) => {
+const reducerAddAuthorsDownload = (state = [], action) => {
   switch (action.type) {
-    case CONSTANTES.AGREGAR_AUTORES_STORE:
+    case CONSTANTS.ADD_AUTHORS_STORE:
       return [...state, ...action.autores];
-    case CONSTANTES.LIMPIAR_IMAGEN_PUBLICACION:
-      return [];
     default:
       return state;
   }
 };
 
-const reducerEstadoDeSubirPublicacion = (state = { estado: null }, action) => {
+const reducerUploadStatusPublication = (state = { status: null }, action) => {
   switch (action.type) {
-    case CONSTANTES.EXITO_SUBIR_PUBLICACION:
-      return { estado: 'EXITO' };
-    case CONSTANTES.ERROR_SUBIR_PUBLICACION:
-      return { estado: 'ERROR' };
-    case CONSTANTES.LIMPIAR_SUBIR_PUBLICACION:
-      return { estado: null };
+    case CONSTANTS.SUCCESS_UP_PUBLICATION:
+      return { status: CONSTANTS.SUCCESS };
+    case CONSTANTS.ERROR_UP_PUBLICACION:
+      return { status: CONSTANTS.ERROR };
+    case CONSTANTS.CLEAN_UP_PUBLICACION:
+      return { status: null };
     default:
       return state;
   }
@@ -77,16 +73,16 @@ const sagaMiddleware = createSagaMiddleware();
 
 const reducers = combineReducers({
   reducerSession,
-  reducerImagenPublicacion,
-  reducerImagenSignUp,
-  reducerAgregarPublicacionDescargadas,
-  reducerAgregarAutoresDescargados,
-  reducerEstadoDeSubirPublicacion,
+  reducerImagePublication,
+  reducerImageSignUp,
+  reducerAddImagePublicationDownload,
+  reducerAddAuthorsDownload,
+  reducerUploadStatusPublication,
   form,
 });
 
 const store = createStore(reducers, applyMiddleware(sagaMiddleware));
 
-sagaMiddleware.run(functionPrimaria);
+sagaMiddleware.run(primaryFunction);
 
 export default store;
