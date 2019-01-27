@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 import {
-  View, Text, StyleSheet,
+  View, StyleSheet, Button,
 } from 'react-native';
+import { blur } from 'redux-form';
+import { connect } from 'react-redux';
+import SeleccionarImagen from '../SeleccionarImagen';
+import {
+  actionCargarImagePublicacion, actionLimpiarImagePublicacion, actionSubirImage,
+} from '../../Store/ACCIONES';
+import SeleccionarGaleriaForm from './SeleccionarGaleriaForm';
+
 
 class SeleccionarGaleria extends Component {
   constructor(props) {
@@ -12,11 +20,23 @@ class SeleccionarGaleria extends Component {
     };
   }
 
+  componentWillUnmount() {
+    this.props.LimpiarImage();
+  }
+
+  registrodeImagen= (values) => {
+    this.props.subirImage(values);
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text>SeleccionarGaleria</Text>
-
+        <View style={styles.image}>
+          <SeleccionarImagen image={this.props.image.image} cargar={this.props.cargarImage} radius />
+        </View>
+        <View style={styles.text}>
+          <SeleccionarGaleriaForm registro={this.registrodeImagen} image={this.props.image.image} />
+        </View>
       </View>
     );
   }
@@ -25,10 +45,32 @@ class SeleccionarGaleria extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#2c3e50',
+    backgroundColor: '#f9f9f9',
+  },
+  image: {
+    flex: 2,
+  },
+  text: {
+    flex: 2,
   },
 });
 
-export default SeleccionarGaleria;
+
+const mapStateToProps = state => ({
+  image: state.reducerImagenPublicacion,
+});
+
+const mapDispatchToProps = dispatch => ({
+  subirImage: (datos) => {
+    dispatch(actionSubirImage(datos));
+  },
+  cargarImage: (image) => {
+    dispatch(actionCargarImagePublicacion(image));
+    dispatch(blur('SeleccionarGaleriaForm', 'image', Date.now()));
+  },
+  LimpiarImage: () => {
+    dispatch(actionLimpiarImagePublicacion());
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SeleccionarGaleria);

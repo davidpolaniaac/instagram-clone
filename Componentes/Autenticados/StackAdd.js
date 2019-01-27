@@ -5,7 +5,7 @@ import SeleccionarGaleria from './SeleccionarGaleria';
 
 const StackAdd = createStackNavigator(
   {
-    Home: {
+    Add: {
       screen: Add,
     },
     SeleccionarGaleria: {

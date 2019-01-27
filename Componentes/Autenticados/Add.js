@@ -19,6 +19,10 @@ export default class Add extends Component {
           title="SeleccionarGaleria"
           onPress={() => { navigation.navigate('SeleccionarGaleria'); }}
         />
+        <Button
+          title="Tomar foto"
+          onPress={() => { navigation.navigate('SeleccionarGaleria'); }}
+        />
       </View>
     );
   }
@@ -29,6 +33,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#2c3e50',
+    backgroundColor: '#f9f9f9',
   },
 });

@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  numero: state.reducerPrueba,
   image: state.reducerImagenSignUp,
 });
 
