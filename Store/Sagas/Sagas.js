@@ -1,6 +1,11 @@
-import { takeEvery, call, select } from 'redux-saga/effects';
+import {
+  takeEvery, call, select, put, all,
+} from 'redux-saga/effects';
 import { autenticacion, baseDeDatos } from '../Servicios/Firebase';
 import CONSTANTES from '../CONSTANTES';
+import {
+  actionAgregarPublicacionesStore, actionAgregarAutoresStore, actionExitoSubirPublicacion, actionErrorSubirPublicacion,
+} from '../ACCIONES';
 
 
 const registroEnFirebase = values => autenticacion
@@ -92,7 +97,41 @@ function* sagaSubirPublicacion({ datos }) {
     const escribirEnFirebase = yield call(escribirFirebase, parametrosImagen, datos.text);
     const { key } = escribirEnFirebase;
     const parametrosDeAutorPublicaciones = { key, uid };
-    const resultadoDeAutoresDePublicacion = yield call(escribirAutorPublicaciones, parametrosDeAutorPublicaciones);
+    yield call(escribirAutorPublicaciones, parametrosDeAutorPublicaciones);
+    yield put(actionExitoSubirPublicacion());
+  } catch (error) {
+    console.log(error);
+    yield put(actionErrorSubirPublicacion());
+  }
+}
+
+const descargarPublicacionesDeFirebase = () => baseDeDatos
+  .ref('publicaciones/')
+  .once('value')
+  .then((snapshot) => {
+    const publicaciones = [];
+    snapshot.forEach((childSnapshot) => {
+      const { key } = childSnapshot;
+      const publicacion = childSnapshot.val();
+      publicacion.key = key;
+      publicaciones.push(publicacion);
+    });
+    return publicaciones;
+  })
+  .catch(error => error);
+
+const descargaAutor = uid => baseDeDatos
+  .ref(`usuarios/${uid}`)
+  .once('value')
+  .then(snapshot => snapshot.val())
+  .catch(error => error);
+
+function* sagaDescargarPublicacion() {
+  try {
+    const publicaciones = yield call(descargarPublicacionesDeFirebase);
+    const autores = yield all(publicaciones.map(publicacion => call(descargaAutor, publicacion.uid)));
+    yield put(actionAgregarAutoresStore(autores));
+    yield put(actionAgregarPublicacionesStore(publicaciones));
   } catch (error) {
     console.log(error);
   }
@@ -102,4 +141,5 @@ export default function* functionPrimaria() {
   yield takeEvery(CONSTANTES.REGISTRO, sagaRegistro);
   yield takeEvery(CONSTANTES.LOGIN, sagaLogin);
   yield takeEvery(CONSTANTES.SUBIR_PUBLICACION, sagaSubirPublicacion);
+  yield takeEvery(CONSTANTES.DESCARGAR_PUBLICACIONES, sagaDescargarPublicacion);
 }

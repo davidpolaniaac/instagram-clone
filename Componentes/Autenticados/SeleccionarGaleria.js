@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Button,
+  View, StyleSheet, Alert,
 } from 'react-native';
 import { blur } from 'redux-form';
 import { connect } from 'react-redux';
 import SeleccionarImagen from '../SeleccionarImagen';
 import {
-  actionCargarImagePublicacion, actionLimpiarImagePublicacion, actionSubirImage,
+  actionCargarImagePublicacion, actionLimpiarImagePublicacion, actionSubirImage, actionLimpiarSubirPublicacion,
 } from '../../Store/ACCIONES';
 import SeleccionarGaleriaForm from './SeleccionarGaleriaForm';
 
@@ -22,6 +22,34 @@ class SeleccionarGaleria extends Component {
 
   componentWillUnmount() {
     this.props.LimpiarImage();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.estadoSubirPublicacion !== nextProps.estadoSubirPublicacion) {
+      switch (nextProps.estadoSubirPublicacion) {
+        case 'EXITO':
+          Alert.alert('Exito', 'Publicacion exitosa', [{
+            text: 'OK',
+            onPress: () => {
+              this.props.navigation.goBack();
+              this.props.limpirarEstadoDePublicacion();
+            },
+          }]);
+          break;
+        case 'ERROR':
+          Alert.alert('Error', 'Publicacion no fue exitosa', [{
+            text: 'OK',
+            onPress: () => {
+              this.props.navigation.goBack();
+              this.props.limpirarEstadoDePublicacion();
+            },
+          }]);
+          break;
+
+        default:
+          break;
+      }
+    }
   }
 
   registrodeImagen= (values) => {
@@ -58,6 +86,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => ({
   image: state.reducerImagenPublicacion,
+  estadoSubirPublicacion: state.reducerEstadoDeSubirPublicacion.estado,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -70,6 +99,9 @@ const mapDispatchToProps = dispatch => ({
   },
   LimpiarImage: () => {
     dispatch(actionLimpiarImagePublicacion());
+  },
+  limpirarEstadoDePublicacion: () => {
+    dispatch(actionLimpiarSubirPublicacion());
   },
 });
 
