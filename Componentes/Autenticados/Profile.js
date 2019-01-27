@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, Button } from 'react-native';
+import {
+  View, Text, Button, StyleSheet,
+} from 'react-native';
 import { autenticacion } from '../../Store/Servicios/Firebase';
 
 export default class Profile extends Component {
@@ -13,7 +15,7 @@ export default class Profile extends Component {
     const { navigation } = this.props;
 
     return (
-      <View>
+      <View style={styles.container}>
         <Text> Profile </Text>
         <Button
           title="Publicacion"
@@ -27,3 +29,13 @@ export default class Profile extends Component {
     );
   }
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#2c3e50',
+  },
+});

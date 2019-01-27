@@ -1,28 +1,22 @@
 import React, { Component } from 'react';
 import {
-  View, Text, Button, StyleSheet,
+  View, Text, StyleSheet,
 } from 'react-native';
 
-export default class Comentarios extends Component {
-  static navigationOptions = {
-    tabBarVisible: false,
-  }
-
+class SeleccionarGaleria extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
+
     };
   }
 
   render() {
-    const { navigation } = this.props;
     return (
       <View style={styles.container}>
-        <Text> Comentarios </Text>
-        <Button
-          title="Autor"
-          onPress={() => { navigation.navigate('Autor'); }}
-        />
+        <Text>SeleccionarGaleria</Text>
+
       </View>
     );
   }
@@ -36,3 +30,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#2c3e50',
   },
 });
+
+export default SeleccionarGaleria;

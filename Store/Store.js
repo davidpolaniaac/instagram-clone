@@ -24,11 +24,23 @@ const reducerSession = (state = null, action) => {
   }
 };
 
+const reducerImagenSignUp = (state = { image: null }, action) => {
+  switch (action.type) {
+    case CONSTANTES.CARGAR_IMAGEN_SIGNUP:
+      return { image: action.image };
+    case CONSTANTES.LIMPIAR_IMAGEN_SIGNUP:
+      return { image: null };
+    default:
+      return state;
+  }
+};
+
 const sagaMiddleware = createSagaMiddleware();
 
 const reducers = combineReducers({
   reducerSession,
   reducerPrueba,
+  reducerImagenSignUp,
   form,
 });
 

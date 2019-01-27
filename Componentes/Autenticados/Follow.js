@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, Button } from 'react-native';
+import {
+  View, Text, Button, StyleSheet,
+} from 'react-native';
 
 export default class Follow extends Component {
   constructor(props) {
@@ -12,7 +14,7 @@ export default class Follow extends Component {
     const { navigation } = this.props;
 
     return (
-      <View>
+      <View style={styles.container}>
         <Text> Follow </Text>
         <Button
           title="Autor"
@@ -22,3 +24,12 @@ export default class Follow extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#2c3e50',
+  },
+});
